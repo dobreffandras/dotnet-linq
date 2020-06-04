@@ -1,4 +1,4 @@
-# Java stream
+# C# Linq
 Demo solution can be found on the “demo_solution” branch.
 
 ### Source: there is no external source
