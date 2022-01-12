@@ -13,6 +13,32 @@ namespace DotnetLinq.Service
 
         public static List<KerdoivSor> GetSzabadszavasSorok()
         {
+            List<KerdoivSor> result = new List<KerdoivSor>();
+
+            var szabadszovegesKerdesek = 
+                kerdesService
+                    .FindAll()
+                    .Where(kerdes => kerdes.tipus == KerdesTipus.SZABAD_SZOVEGES);
+            
+            foreach (var kerdes in szabadszovegesKerdesek)
+            {
+                var valaszok = valaszService.FindByKerdesId(kerdes.id);
+                var felhasznalok = 
+                    valaszok.Select(v => v.felhasznaloId).Distinct()
+                    .Select(id => felhasznaloService.GetFelhasznaloById(id))
+                    .ToArray();
+
+
+                result.AddRange(valaszok.Join(felhasznalok, v => v.felhasznaloId, f => f.id, (v, f) =>
+                    new KerdoivSor
+                    {
+                        kerdes = kerdes.kerdes,
+                        valaszadoValasz = new List<string>() {v.valaszSzoveg},
+                        felhasznaloNev = f.nev,
+                    }));
+            }
+
+            return result;
             /*
              * Második feladat: Implementáljuk ezt a metódust úgy, hogy logolja ki a konzolra az adatbázisban található
              * szabadszavas kérdéseket a hozzá tartozó válaszokkal úgy, hogy a válaszokat felhasználó szerint rendezi.
@@ -37,7 +63,7 @@ namespace DotnetLinq.Service
              * Szamanta: Whiskey
              * Bobi: Akad
              */
-            return new List<KerdoivSor>();
+            //return new List<KerdoivSor>();
         }
 
 

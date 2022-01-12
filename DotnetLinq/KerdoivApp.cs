@@ -95,6 +95,20 @@ namespace DotnetLinq
              * Béla: D1, D2, D3
              * Andi: E1, E2, E3
              */
+            foreach (var kerdoivSor in sorok.GroupBy(sor => sor.kerdes))
+            {
+                Console.WriteLine(kerdoivSor.Key);
+                Console.WriteLine("      =========================");
+                foreach (var sor in kerdoivSor)
+                {
+                    Console.Write(sor.felhasznaloNev + ": ");
+                    Console.Write(String.Join(", ", sor.valaszadoValasz));
+                    Console.WriteLine();
+                }
+                
+                Console.WriteLine();
+            }
+            
         }
     }
 }
